@@ -1,4 +1,4 @@
-name: landcover
+name: MS_landcover
 
 channels:
   - conda-forge

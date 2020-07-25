@@ -52,10 +52,13 @@ def get_free_tcp_port():
 class SessionHandler():
 
     def __init__(self, args):
-        self._WORKERS = [ # TODO: I hardcode that there are 4 GPUs available on the local machine
-            {"type": "local", "gpu_id": 0},
-            {"type": "local", "gpu_id": 1},
-            {"type": "local", "gpu_id": 2}
+        # self._WORKERS = [ # TODO: I hardcode that there are 4 GPUs available on the local machine
+        #     {"type": "local", "gpu_id": 0},
+        #     {"type": "local", "gpu_id": 1},
+        #     {"type": "local", "gpu_id": 2}
+        # ]
+        self._WORKERS = [ # zgle ec2 g4dn.x
+            {"type": "local", "gpu_id": 0}
         ]
 
         self._WORKER_POOL = Queue()
@@ -98,12 +101,14 @@ class SessionHandler():
 
     def _spawn_local_worker(self, port, model_fn, gpu_id, fine_tune_layer, model_type):
         command = [
-            "/usr/bin/env", "python", "worker.py",
+            # "/usr/bin/env", "python", "worker.py",
+            "python", "worker.py",
             "--model", model_type,
             "--model_fn", model_fn,
             "--fine_tune_layer", str(fine_tune_layer),
             "--port", str(port)
         ]
+        print('_spawn_local_worker()::command:', command)
         if gpu_id is not None:
             command.append("--gpu")
             command.append("%d" % (gpu_id))
@@ -112,6 +117,8 @@ class SessionHandler():
 
 
     def create_session(self, session_id, model_key):
+        print('session_id', session_id)
+        print('model_key', model_key)
         if session_id in self._SESSION_MAP:
             raise ValueError("session_id %d has already been created" % (session_id))
 

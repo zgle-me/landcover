@@ -8,6 +8,7 @@ from . import ROOT_DIR
 
 
 def _load_model(model):
+    print('_load_model(): model',model)
     if not os.path.exists(model["model"]["fn"]):
         return False
     return {
@@ -43,4 +44,5 @@ def load_models():
             else:
                 LOGGER.warning("There is a conflicting dataset key in models.mine.json, skipping.")
 
+    print('load_models(): models', models)
     return models
