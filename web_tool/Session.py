@@ -73,6 +73,7 @@ class Session():
             })
 
     def load(self, encoded_model_fn):
+        print('encoded_model_fn:',encoded_model_fn)
         model_fn = base64.b64decode(encoded_model_fn).decode('utf-8')
 
         del self.model
